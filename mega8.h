@@ -20,19 +20,18 @@
 *
 */
 
-
-
+#include <stdint.h>
 
 /*
 * USART 
 *
 * UBRR values for U2X=0:
 * ----------------------
-* clock	-->	1MHz	2MHz 	4MHz 
-* baud v|	UBRR 	UBRR	UBRR
-* 2400	|	25		51		103
-* 4800	|	12		25		51
-* 9600	|	6		12	
+* clock -->	1MHz  2MHz  4MHz 
+* baud v|  UBRR  UBRR  UBRR
+* 2400  |  25  	  51    103
+* 4800  |  12  	  25     51
+* 9600  |  6  	  12
 */
 
 #define UBRR_VALUE 25
@@ -40,7 +39,10 @@
 void USART_Init();
 void USART_WriteChar(char data);
 
-// I2C 
+// PWM
+
+void PWM_Init();
+void PWM_SetPercent(uint8_t duty);
 
 
 
