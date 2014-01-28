@@ -4,12 +4,13 @@ This small library provides basic functions to work with MCU peripherals. It is 
 
 ### USART ###
 
-	USART_Init();
+	void USART_Init();
+	void USART_WriteChar(char data);
 
 ### I<sup>2</sup>C ###
 
-	I2C_Init);
+	void I2C_Init());
 
 ### PWM ###
 
-	PWM_Init();
+	void PWM_Init();
