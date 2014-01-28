@@ -42,6 +42,7 @@ void USART_WriteChar(char data);
 // PWM
 
 void PWM_Init();
+void PWM_SetValue(uint8_t duty);
 void PWM_SetPercent(uint8_t duty);
 
 

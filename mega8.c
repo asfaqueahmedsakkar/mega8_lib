@@ -149,6 +149,11 @@ void PWM_Init()
 	// TIMSK |=  (1 << TOIE2);			
 }
 
+void PWM_SetValue(uint8_t duty)
+{
+	OCR2 = duty;
+}
+
 void PWM_SetPercent(uint8_t duty)
 {
 	OCR2 = int(255 * (duty/100.0));
