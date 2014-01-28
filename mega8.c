@@ -52,7 +52,7 @@ void USART_Init()
 	UCSRB |=  (1 << TXEN);
 
 	// UCSRB.UCSZ2 determines number of data bits, !!! UCSZ has two lower bits 
-	// in UCSRC and MSB in UCSRC
+	// in UCSRC and MSB in UCSRB
 	// 0 = 5-bit
 	// 1 = 6-bit
 	// 2 = 7-bit
@@ -61,8 +61,7 @@ void USART_Init()
 
 	// UCSRC.URSEL = 1 selects UCSRC register to write to (else writes to UBRRH, 
 	// the space is shared)
-	UCSRC |=  (1 << URSEL);
-	UCSRC |=  (3 << UCSZ0);	
+	UCSRC =  (1 << URSEL) | (3 << UCSZ0);	
 
 	// UCSRC.UMSEL = 1 sets synchronous transfer mode (else asynchronous)	
 	// UCSRC |= (1 << UMSEL);
@@ -79,8 +78,8 @@ void USART_Init()
 	// UCSRC.UCPOL selects clock polarity on synchronous mode
 	// UCSRC |= (1 << UCPOL);	
 
-	// UBRR sets usart prescaler
-	UBRR = UBRR_VALUE;	
+	// UBRR sets usart prescaler (UBRRL, UBRRH)
+	UBRRL = UBRR_VALUE;	
 }
 
 void USART_WriteChar(char data)
@@ -90,12 +89,24 @@ void USART_WriteChar(char data)
    UDR=data;
 }
 
+void USART_PrintString(char * InputString)
+{
+	while(*InputString != '\0')
+	{
+		USART_WriteChar(*InputString);
+		InputString++;
+	}
+	
+}
+
 //
 // PWM
 //
 
 void PWM_Init()
 {
+	// DDRB3 must be set to enable PWM pin for T/C2
+	DDRB |=  (1 << DDRB3);		
 	// TCCR2.CS22:0 selects PWM prescaler
 	// 0 = no clock (PWM off)
 	// 1 = 1 (directly system clock)
