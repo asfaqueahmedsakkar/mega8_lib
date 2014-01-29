@@ -34,8 +34,12 @@
 * 9600  |  6  	  12
 */
 
+#define F_CPU 1000000UL 
+
 #define UBRR_VALUE 25
 #define TWI_PRESCALER 6
+
+#define DISPLAY_PORT PORTC
 
 void USART_Init();
 void USART_WriteChar(char data);
@@ -57,6 +61,21 @@ uint8_t ADC_GetVal();
 void I2C_Init();
 void I2C_Data(uint8_t SLA, uint8_t Data);
 
+
+// LCD Display
+
+void DisplayClock();
+void DisplayInit();
+void DisplayWriteChar(char Character);
+void DisplayWriteInst(char Instruction);
+
+enum DisplayInstruction
+{
+	
+};
+
 // misc
+
+
 
 void Error();

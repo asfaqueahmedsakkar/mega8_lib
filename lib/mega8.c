@@ -22,6 +22,7 @@
 
 
 #include "mega8.h"
+#include <util/delay.h>
 #include <avr/io.h>
 #include <util/twi.h>
 
@@ -284,4 +285,64 @@ void I2C_Data(uint8_t SLA, uint8_t Data)
 void Error()
 {
 	
+}
+
+//
+// LCD Display
+//
+
+void DisplayInit()
+{
+	// sets R/W pin to zero (sets to write)
+	PORTB &= ~(1 << PORTB3);
+
+	// set 4b mode
+	PORTC = 0b0010;	DisplayClock();
+
+	// st 4b operation 2 line display font 5x8
+	PORTC = 0b0010;	DisplayClock();
+	PORTC = 0b1000;	DisplayClock();
+
+	// Turn on display and cursor
+	PORTC = 0b0000;	DisplayClock();
+	PORTC = 0b1110;	DisplayClock();
+
+	// Set increment address and shift cursor right
+	PORTC = 0b0000;	DisplayClock();
+	PORTC = 0b0110;	DisplayClock();
+
+	// Set cursor to 0 and clear
+	PORTC = 0b0000;	DisplayClock();
+	PORTC = 0b0001;	DisplayClock();	
+}
+
+void DisplayClock()
+{
+	PORTB |= (1 << PORTB4);
+	_delay_ms(2);
+	PORTB &= ~(1 << PORTB4);
+	_delay_ms(1);
+}
+
+void DisplayWriteChar(char Character)
+{
+	// set RS to "1"
+	PORTB |= (1 << PORTB5);
+
+	char temp = (Character >> 4);
+
+	DISPLAY_PORT = temp; DisplayClock();
+	DISPLAY_PORT = (Character & 0x0f); DisplayClock();
+
+	// set RS back to "0"
+	PORTB &= ~(1 << PORTB5);
+}
+
+void DisplayWriteInst(char Instruction)
+{
+	char temp = (Instruction >> 4);
+
+	DISPLAY_PORT = temp; DisplayClock();
+	DISPLAY_PORT = (Instruction & 0x0f); DisplayClock();
+
 }
