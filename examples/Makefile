@@ -1,4 +1,4 @@
-PROJECT=pwm_relay
+PROJECT=display_4b
 
 CC=avr-gcc -mmcu=atmega8
 CFLAGS=-c -Wall -Os
