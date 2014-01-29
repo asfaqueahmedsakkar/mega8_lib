@@ -4,15 +4,31 @@ This small library provides basic functions to work with MCU peripherals. It is 
 
 Based on <http://www.atmel.com/images/atmel-2486-8-bit-avr-microcontroller-atmega8_l_datasheet.pdf>
 
-### USART ###
+### Provided functions ###
+#### USART ####
 
 	void USART_Init();
 	void USART_WriteChar(char data);
+	void USART_PrintString(char * InputString);
 
-### I<sup>2</sup>C ###
-
-	void I2C_Init());
-
-### PWM ###
+#### PWM ####
 
 	void PWM_Init();
+	void PWM_SetValue(uint8_t duty);
+	void PWM_SetPercent(uint8_t duty);
+
+#### ADC ####
+	
+	void ADC_Init();
+	uint8_t ADC_GetVal();
+
+#### I<sup>2</sup>C ####
+	
+	void I2C_Init();
+	void I2C_Data(uint8_t SLA, uint8_t Data);
+
+### Compiling examples ###
+You should modify makefile for your needs (actualy set for direct programming with AVR Dragon)
+	make
+	make program
+
