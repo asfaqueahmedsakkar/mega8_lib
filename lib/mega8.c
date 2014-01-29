@@ -89,7 +89,7 @@ void USART_WriteChar(char data)
    UDR=data;
 }
 
-void USART_PrintString(char * InputString)
+void USART_PrintString(const char * InputString)
 {
 	while(*InputString != '\0')
 	{
@@ -106,7 +106,7 @@ void USART_PrintString(char * InputString)
 void PWM_Init()
 {
 	// DDRB3 must be set to enable PWM pin for T/C2
-	DDRB |=  (1 << DDRB3);		
+	DDRB |=  (1 << DDB3);		
 	// TCCR2.CS22:0 selects PWM prescaler
 	// 0 = no clock (PWM off)
 	// 1 = 1 (directly system clock)
@@ -167,5 +167,63 @@ void PWM_SetValue(uint8_t duty)
 
 void PWM_SetPercent(uint8_t duty)
 {
-	OCR2 = int(255 * (duty/100.0));
+	OCR2 = (int)(255 * (duty/100.0));
+}
+
+//
+// ADC
+//
+
+void ADC_Init()
+{
+	// ADMUX.REFS1:0 determines used voltage reference
+	// 0 = AREF
+	// 1 = AVCC with external cap at AREF pin
+	// 3 = Internal 2.56V with external cap at AREF pin
+	ADMUX |= (1 << REFS0);
+
+	// ADMUX.ADLAR = 1 shifts 10-bit conversion result left so you can 
+	// read 8b result from ADCH
+	ADMUX |= (1 << ADLAR);
+
+	// ADMUX.MUX3:0 determines connection between adc unit and MCU pins
+	// 0 = ADC0
+	// 1 = ADC1
+	// 2 = ADC2
+	// 3 = ADC3
+	// 4 = ADC4
+	// 5 = ADC5
+	// 6 = ADC6
+	// 7 = ADC7
+	// 14= 1.30V (VBG)
+	// 15= 0V (GND)
+	// ADMUX |= (2 << MUX0)
+
+	// ADCSRA.ADEN = 1 enables ADC unit
+	ADCSRA |= (1 << ADEN);
+
+	// ADCSRA.ADSC starts single measure (in single conversion mode)
+	// ADCSRA |= (1 << ADSC);	
+
+	// ADCSRA.ADFR = 1 sets free runing mode
+	// ADCSRA |= (1 << ADFR);
+
+	// ADCSRA.ADIE = 1 enables ADC interrupt
+	ADCSRA |= (1 << ADIE);			
+
+	// ADCSRA.ADPS2:0 sets ADC prescaler
+	// 0 = clk/2
+	// 1 = clk/2
+	// 2 = clk/4
+	// 3 = clk/8
+	// 4 = clk/16
+	// 5 = clk/32
+	// 6 = clk/64
+	// 7 = clk/128
+	ADCSRA |= (3 << ADPS0);		
+}
+
+uint8_t ADC_GetVal()
+{
+	return ADCH;
 }

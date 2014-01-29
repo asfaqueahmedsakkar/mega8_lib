@@ -38,6 +38,7 @@
 
 void USART_Init();
 void USART_WriteChar(char data);
+void USART_PrintString(const char * InputString);
 
 // PWM
 
@@ -45,6 +46,9 @@ void PWM_Init();
 void PWM_SetValue(uint8_t duty);
 void PWM_SetPercent(uint8_t duty);
 
+// ADC
 
+void ADC_Init();
+uint8_t ADC_GetVal();
 
 
