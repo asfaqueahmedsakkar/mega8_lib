@@ -1,6 +1,6 @@
 ﻿/* 
 *
-* File:		usart_driven_PWM.c
+* File:		pwm_relay.c
 * Date:		
 *
 * Copyright (c)2014	Lukas Janik <lucaso.janik@gmail.com>
@@ -27,7 +27,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdio.h>
-#include <string.h>
+#include <util/delay.h>
 #include "../lib/mega8.h"
 
 
@@ -40,6 +40,12 @@ int main(void)
 	
 	// initializes PWM unit
 	PWM_Init();
+
+	// initializes ADC unit
+	ADC_Init();
+
+	DDRC |= (1 << DDC5) | (1 << DDC4);
+	PORTC |= (1 << PORTC5) | (1 << PORTC4);
 	
 	// sets duty cycle to 100%
 	OCR2=255;
@@ -55,13 +61,13 @@ int main(void)
 	
     while(1)
     {
-		
+		ADCSRA |= (1 << ADSC);
+		_delay_ms(400);
     }
 }
 
 ISR(USART_RXC_vect)
 {	
-	char * buffer = "0000000000000";
 	char received;
 	received=UDR;
 	//UDR=received; // if uncommented, sent characters will be shown in console (=echo)
@@ -69,12 +75,28 @@ ISR(USART_RXC_vect)
 	switch(received)
 	{
 		// increases / decreases PWM duty (OCR register) by 1
-		case '+':	OCR2 +=1;sprintf(buffer,"OCR2: %d\r\n",OCR2); USART_PrintString(buffer); break;	
-		case '-':	OCR2 -=1;sprintf(buffer,"OCR2: %d\r\n",OCR2); USART_PrintString(buffer); break;
+		case '+':	OCR2 +=1; break;	
+		case '-':	OCR2 -=1; break;
 		// increases / decreases PWM duty (OCR register) by 10
-		case '*':	OCR2 +=10;sprintf(buffer,"OCR2: %d\r\n",OCR2); USART_PrintString(buffer); break;
-		case '/':	OCR2 -=10;sprintf(buffer,"OCR2: %d\r\n",OCR2); USART_PrintString(buffer); break;
+		case '*':	OCR2 +=10; break;
+		case '/':	OCR2 -=10; break;
+		// toggles PC4 pin (relay1)
+		case '1':	PORTC ^= (1 << PORTC4); break;
+		// toggles PC5 pin (relay2)
+		case '2':	PORTC ^= (1 << PORTC5); break;
+
 	} 
+}
+
+ISR(ADC_vect)
+{
+	char * buffer = "00000000000000";
+	uint8_t pomocna = ADCH * 500 / 255;
+	uint8_t r1 = (PORTC & (1 << PORTC4) ) ? 0 : 1;
+	uint8_t r2 = (PORTC & (1 << PORTC5) ) ? 0 : 1;
+	sprintf(buffer,"Temp: %d\tPWM:%d\tR1:%d\tR2:%d \r",pomocna,OCR2,r1,r2);
+
+	USART_PrintString(buffer);
 }
 
 
