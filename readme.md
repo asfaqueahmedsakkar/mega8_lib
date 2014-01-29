@@ -27,9 +27,16 @@ Based on <http://www.atmel.com/images/atmel-2486-8-bit-avr-microcontroller-atmeg
 	void I2C_Init();
 	void I2C_Data(uint8_t SLA, uint8_t Data);
 
+#### LCD Display (4 bit communication) ####
+	
+	void DisplayInit();
+	void DisplayWriteChar(char Character);
+	void DisplayWriteInst(DisplayInstruction Inst);
+
 ### Compiling examples ###
 You should modify makefile for your needs (actualy set for direct programming with AVR Dragon), change variable PROJECT
 to file name (exclude extension)
+
 	make
 	make program
 

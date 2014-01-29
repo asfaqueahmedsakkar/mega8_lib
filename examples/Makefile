@@ -13,6 +13,7 @@ all: $(PROJECT)
 $(PROJECT): $(OBJ)
 	$(CC) $(OBJ) -o $(BIN)$(PROJECT).elf
 	avr-size --format=avr --mcu=atmega8 $(BIN)$(PROJECT).elf
+	avr-objcopy -O ihex -j .text -j .data $(BIN)$(PROJECT).elf $(BIN)$(PROJECT).hex
 
 $(PROJECT).o: $(PROJECT).c
 	$(CC) $(CFLAGS) $(PROJECT).c -o $(PROJECT).o
@@ -21,7 +22,6 @@ mega8.o: ../lib/mega8.c
 	$(CC) $(CFLAGS) ../lib/mega8.c -o mega8.o
         
 prog:
-	avr-objcopy -O ihex -j .text -j .data $(BIN)$(PROJECT).elf $(BIN)$(PROJECT).hex
 	avrdude -p m8 -c dragon_isp -P usb -U flash:w:$(BIN)$(PROJECT).hex
         
 clean:

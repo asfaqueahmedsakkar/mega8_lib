@@ -76,7 +76,9 @@ ISR(USART_RXC_vect)
 
 	switch(UDR)
 	{
-		case '':
+		case 13: DisplayWriteInst(GoToFirst); break;	// enter
+		case 10: DisplayWriteInst(GoToFirst); break;	// enter
+		case 8: DisplayWriteInst(Backspace); break; 	// backspace
 		default: DisplayWriteChar(buffer);break;
 	}
 	
