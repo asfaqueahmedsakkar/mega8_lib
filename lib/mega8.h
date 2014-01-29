@@ -63,19 +63,30 @@ void I2C_Data(uint8_t SLA, uint8_t Data);
 
 
 // LCD Display
+//
+// Display		MCU
+// ----------------
+// RW			PB3
+// E			PB4
+// RS			PB5
+// -
+// D4			PC0
+// D5			PC1
+// D6			PC2
+// D7			PC3
+
+typedef enum {
+	GoToFirst,
+	GoToSec,
+	Clear,
+	Backspace	
+}DisplayInstruction;
 
 void DisplayClock();
 void DisplayInit();
 void DisplayWriteChar(char Character);
-void DisplayWriteInst(char Instruction);
-
-enum DisplayInstruction
-{
-	
-};
+void DisplayWriteInst(DisplayInstruction Inst);
 
 // misc
-
-
 
 void Error();
