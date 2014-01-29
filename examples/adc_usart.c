@@ -67,10 +67,7 @@ ISR(USART_RXC_vect)
 ISR(ADC_vect)
 {
 	// ADC Measure complete code
-	char buffer[20];
+	char * buffer = "000000000000000";
 	sprintf(buffer,"ADC value: %d  \r",ADCH);
-	USART_PrintString(&buffer);
+	USART_PrintString(buffer);
 }
-
-
-
