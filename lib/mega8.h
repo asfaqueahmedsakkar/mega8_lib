@@ -38,7 +38,7 @@
 
 void USART_Init();
 void USART_WriteChar(char data);
-void USART_PrintString(const char * InputString);
+void USART_PrintString(char * InputString);
 
 // PWM
 

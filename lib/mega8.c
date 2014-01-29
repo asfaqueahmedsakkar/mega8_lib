@@ -89,7 +89,7 @@ void USART_WriteChar(char data)
    UDR=data;
 }
 
-void USART_PrintString(const char * InputString)
+void USART_PrintString(char * InputString)
 {
 	while(*InputString != '\0')
 	{
