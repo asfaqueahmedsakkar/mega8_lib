@@ -35,6 +35,7 @@
 */
 
 #define UBRR_VALUE 25
+#define TWI_PRESCALER 6
 
 void USART_Init();
 void USART_WriteChar(char data);
@@ -51,4 +52,11 @@ void PWM_SetPercent(uint8_t duty);
 void ADC_Init();
 uint8_t ADC_GetVal();
 
+// I2C
 
+void I2C_Init();
+void I2C_Data(uint8_t SLA, uint8_t Data);
+
+// misc
+
+void Error();

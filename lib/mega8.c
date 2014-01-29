@@ -23,6 +23,7 @@
 
 #include "mega8.h"
 #include <avr/io.h>
+#include <util/twi.h>
 
 //
 // USART
@@ -226,4 +227,61 @@ void ADC_Init()
 uint8_t ADC_GetVal()
 {
 	return ADCH;
+}
+
+//
+// I2C
+//
+
+void I2C_Init()
+{
+	// TWBR.TWBR7:0 selects TWI bitrate division factor for SCL clock
+	TWBR = TWI_PRESCALER;
+
+	// TWCR.TWEN = 1 enables TWI
+	// TWCR |= (1 << TWEN);
+
+	// TWCR.TWIE =1 enables TWI interrupts
+	TWCR |= (1 << TWIE);	 
+
+	// TWSR.TWPS1:0 selects prescaler for TWI
+	// 0 = 1
+	// 1 = 4
+	// 2 = 16
+	// 3 = 64
+	TWSR |= (1 << TWPS0);	
+
+}
+
+void I2C_Data(uint8_t SLA, uint8_t Data)
+{
+	// START condition
+	 TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+	 while (!(TWCR & (1 << TWINT))); // cekani na nastaveni flagu
+	 
+	 if((TWSR & 0xF8) != TW_START)
+	 	Error();
+	 
+	 // Writes destination address, adds write symbol
+	 TWDR=((SLA << 1) + 1);
+	 TWCR = (1 << TWINT) | (1 << TWEN);
+	 // Wait for the transmission
+	 while (!(TWCR & (1 << TWINT))); 
+	 
+	 if((TWSR & 0xF8) != TW_MT_SLA_ACK)
+	 	Error();
+
+	 // Sending data
+	 TWDR = Data;
+	 TWCR = (1 << TWINT) | (1 << TWEN);
+	 // Wait for the transmission
+	 while (!(TWCR & (1<<TWINT))); 
+	 
+	 // STOP condition
+	 TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
+}
+
+void Error()
+{
+	
 }
