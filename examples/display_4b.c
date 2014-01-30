@@ -32,15 +32,13 @@ int main(void)
 {	
 	// initializes the USART
 	USART_Init();
-	
-	// initializes ADC unit
-	// ADC_Init();
-	DDRD = 1;
+
+	// enables output for display pins
 	DDRC = (15 << DDC0);
 	DDRB = (7 << DDB3);
 	
 	_delay_ms(1000);
-	PORTD = 1;
+
 	// initializes display
 	DisplayInit();
 
@@ -49,24 +47,14 @@ int main(void)
 
 	// writes hello string to USART
 	USART_PrintString("4-bit display program\r\n");
-
-	DisplayWriteChar('H');
-	DisplayWriteChar('e');
-	DisplayWriteChar('l');
-	DisplayWriteChar('l');
-	DisplayWriteChar('o');
-	DisplayWriteChar(' ');
-	DisplayWriteChar('v');
-	DisplayWriteChar('o');
-	DisplayWriteChar('l');
-	DisplayWriteChar('e');
-
-
-
-
 	
+	// writes hello string to Display
+	DisplayWriteString("First line",0);
+	DisplayWriteString("Second line",40); 	// display address 40 is first char on second line
+
     while(1)
     {
+
     }
 }
 
@@ -74,15 +62,21 @@ ISR(USART_RXC_vect)
 {	
 	char buffer = UDR;
 
-	switch(UDR)
+	switch(buffer)
 	{
-		case 13: DisplayWriteInst(GoToFirst); break;	// enter
-		case 10: DisplayWriteInst(GoToFirst); break;	// enter
-		case 8: DisplayWriteInst(Backspace); break; 	// backspace
-		default: DisplayWriteChar(buffer);break;
+		// on receiving some special char do:
+		case 13: DisplayWriteInst(0xC0); break;	// enter 
+		case 10: DisplayWriteInst(0xC0); break;	// enter  > goes to second line
+		case 8: DisplayWriteInst(16); DisplayWriteChar(' '); DisplayWriteInst(16); break; 	// backspace = go back, draw space, go back
+		case 27: DisplayWriteInst(2); break;				// escape goes to first line, first char
+		// if normal char, write it to display directly
+		default: DisplayWriteChar(buffer); break;
 	}
 	
 	UDR=buffer;
 }
 
+ISR(ADC_vect)
+{
 
+}
