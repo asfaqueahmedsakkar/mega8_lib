@@ -53,12 +53,14 @@ int main(void)
 
 	// writes hello string to USART
 
-	USART_PrintString("4-bit display program\r\n");
+	USART_PrintString("4-bit display program with keyboard\r\n");
 	
     while(1)
     {
+    	// Ẃrites ADC value to first line of LCD 
     	sprintf(buffer,"ADC: %d  ",ADCH);
     	DisplayWriteString(buffer,0);
+    	
     	switch(GetKey(ADCH))
     	{
     		case btnUP: strcpy(buffer,"UP   "); break;
