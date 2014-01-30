@@ -9,6 +9,7 @@ OBJ=$(PROJECT).o
 
 
 all: $(PROJECT)	 
+	clean
 
 $(PROJECT).o: $(PROJECT).c
 	$(CC) $(CFLAGS) $(PROJECT).c -o $(PROJECT).o
