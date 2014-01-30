@@ -41,6 +41,13 @@
 
 #define DISPLAY_PORT PORTC
 
+#define btnRIGHT  0
+#define btnUP     1
+#define btnDOWN   2
+#define btnLEFT   3
+#define btnSELECT 4
+#define btnNONE   5
+
 void USART_Init();
 void USART_WriteChar(char data);
 void USART_PrintString(char * InputString);
@@ -75,18 +82,20 @@ void I2C_Data(uint8_t SLA, uint8_t Data);
 // D6			PC2
 // D7			PC3
 
-typedef enum {
-	GoToFirst,
-	GoToSec,
-	Clear,
-	Backspace	
-}DisplayInstruction;
+// Common instructions
+//  1 : clear display
+//	2 : go to first
+//	4 : go to previous symbol
+//	0xC0 : go to second line
+
 
 void DisplayClock();
 void DisplayInit();
 void DisplayWriteChar(char Character);
-void DisplayWriteInst(DisplayInstruction Inst);
+void DisplayWriteInst(uint8_t Inst);
+void DisplayWriteString(char * InputString, uint8_t address);
 
 // misc
 
 void Error();
+uint8_t GetKey(uint8_t ADC_Val);

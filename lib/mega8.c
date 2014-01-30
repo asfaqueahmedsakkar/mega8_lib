@@ -199,7 +199,7 @@ void ADC_Init()
     // 7 = ADC7
     // 14= 1.30V (VBG)
     // 15= 0V (GND)
-    // ADMUX |= (2 << MUX0)
+    ADMUX |= (5 << MUX0);
 
     // ADCSRA.ADEN = 1 enables ADC unit
     ADCSRA |= (1 << ADEN);
@@ -339,20 +339,45 @@ void DisplayWriteChar(char Character)
     PORTB &= ~(1 << PORTB5);
 }
 
-void DisplayWriteInst(DisplayInstruction Inst)
+void DisplayWriteInst(uint8_t Inst)
 {
-    char Instruction=0;
-
-    switch(Inst)
-    {
-        case GoToFirst: Instruction = 0b10000000; break;
-        case GoToSec: Instruction = 0b11000000; break;
-        case Clear: Instruction=1; break;
-        case Backspace: Instruction=0b00010000; break;
-    }
-    char temp = (Instruction >> 4);
+    char temp = (Inst >> 4);
 
     DISPLAY_PORT = temp; DisplayClock();
-    DISPLAY_PORT = (Instruction & 0x0f); DisplayClock();
+    DISPLAY_PORT = (Inst & 0x0f); DisplayClock();
 
+}
+
+void DisplayWriteString(char * InputString, const uint8_t address)
+{
+    // go to address
+    DisplayWriteInst((128 | address));
+
+    // write whole string by char
+     while(*InputString != '\0')
+    {
+        DisplayWriteChar(*InputString);
+        InputString++;
+    }
+  
+}
+
+//
+// Misc
+//
+
+uint8_t GetKey(uint8_t ADC_Val)
+{
+    if(ADC_Val < 15)
+        return btnRIGHT;
+    if(ADC_Val < 55)
+        return btnUP;
+    if(ADC_Val < 100)
+        return btnDOWN;
+    if(ADC_Val < 150)
+        return btnLEFT;
+    if(ADC_Val < 215)
+        return btnSELECT;
+
+    return btnNONE;
 }
