@@ -1,4 +1,4 @@
-PROJECT=display_4b
+PROJECT=display_4b_keyboard
 
 CC=avr-gcc -mmcu=atmega8
 CFLAGS=-c -Wall -Os
