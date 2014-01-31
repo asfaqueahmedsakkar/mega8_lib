@@ -254,7 +254,7 @@ void I2C_Init()
 
 }
 
-void I2C_Data(uint8_t SLA, uint8_t Data)
+void I2C_DataSend(uint8_t SLA, uint8_t Data)
 {
     // START condition
      TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);

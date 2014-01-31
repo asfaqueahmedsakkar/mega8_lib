@@ -66,7 +66,7 @@ uint8_t ADC_GetVal();
 // I2C
 
 void I2C_Init();
-void I2C_Data(uint8_t SLA, uint8_t Data);
+void I2C_DataSend(uint8_t SLA, uint8_t Data);
 
 
 // LCD Display
