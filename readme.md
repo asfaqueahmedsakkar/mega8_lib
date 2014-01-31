@@ -25,18 +25,27 @@ Based on <http://www.atmel.com/images/atmel-2486-8-bit-avr-microcontroller-atmeg
 #### I<sup>2</sup>C ####
 	
 	void I2C_Init();
-	void I2C_Data(uint8_t SLA, uint8_t Data);
+	void I2C_DataSend(uint8_t SLA, uint8_t Data);
 
-#### LCD Display (4 bit communication) ####
+#### LCD Display (HD44780U - like) ####
 	
 	void DisplayInit();
 	void DisplayWriteChar(char Character);
-	void DisplayWriteInst(DisplayInstruction Inst);
+	void DisplayWriteInst(uint8_t Inst);
+	void DisplayWriteString(char * InputString, uint8_t address);
 
-### Compiling examples ###
-You should modify makefile for your needs (actualy set for direct programming with AVR Dragon), change variable PROJECT
-to file name (exclude extension)
+#### Analog keyboard recognition (Arduino Display shield - like) ####
+
+	uint8_t GetKey(uint8_t ADC_Val);
+
+#### Stepper driver 4988 ####
+
+	... working on
+
+### Examples compilation ###
+
+You should modify makefile for your needs (now set for programming with AVR Dragon), change variable PROJECT to file name (exclude extension)
 
 	make
-	make program
+	make prog
 
