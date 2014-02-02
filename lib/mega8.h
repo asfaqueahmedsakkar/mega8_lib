@@ -48,6 +48,9 @@
 #define btnSELECT 4
 #define btnNONE   5
 
+#define DIR_LEFT  0
+#define DIR_RIGHT 1
+
 void USART_Init();
 void USART_WriteChar(char data);
 void USART_PrintString(char * InputString);
@@ -94,6 +97,12 @@ void DisplayInit();
 void DisplayWriteChar(char Character);
 void DisplayWriteInst(uint8_t Inst);
 void DisplayWriteString(char * InputString, uint8_t address);
+
+
+// stepper driver A4988
+
+void Step(uint8_t direction);
+void Rotate(uint8_t steps, uint8_t direction);
 
 // misc
 
