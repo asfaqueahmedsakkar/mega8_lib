@@ -366,13 +366,49 @@ void DisplayWriteString(char * InputString, const uint8_t address)
 // stepper driver A4988
 //
 
+void SetStep(uint8_t direction)
+{
+    switch(direction)
+    {
+        case FULLSTEP: PORTB &= ~((1 << PORTB1) | (1 << PORTB2)); break;
+        case HALFSTEP: PORTB &= ~(1 << PORTB2); PORTB |= (1 << PORTB1); break;
+        case QUARSTEP: PORTB &= ~(1 << PORTB1); PORTB |= (1 << PORTB2); break;
+        case EIGHSTEP: PORTB |= (1 << PORTB1); PORTB |= (1 << PORTB2); break;
+        default: PORTB &= ~((1 << PORTB1) | (1 << PORTB2)); break;
+    }
+}
+
 void Step(uint8_t direction)
 {
-    
+    // enables chip
+    PORTB &= ~(1 << PORTB0);
+
+    // set direction pin
+    if(direction == DIR_LEFT)
+        PORTB |= (1 << PORTB3);
+    else
+        PORTB &= ~(1 << PORTB3);
+
+    // set step
+    _delay_us(2);
+    PORTB |= (1 << PORTB4);
+    _delay_us(3);
+    PORTB &= ~(1 << PORTB4);
+    _delay_us(3);
+
+
+    #ifdef HOLD
+        PORTB |= (1 << PORTB0);
+    #endif
 
 }
 
-void Rotate(uint8_t steps, uint8_t direction);
+void Rotate(uint8_t steps, uint8_t direction)
+{
+    int i;    
+    for(i=0;i<steps;i++)
+        Step(direction);
+}
 
 
 //

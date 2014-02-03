@@ -22,18 +22,6 @@
 
 #include <stdint.h>
 
-/*
-* USART 
-*
-* UBRR values for U2X=0:
-* ----------------------
-* clock -->	1MHz  2MHz  4MHz 
-* baud v|  UBRR  UBRR  UBRR
-* 2400  |  25  	  51    103
-* 4800  |  12  	  25     51
-* 9600  |  6  	  12
-*/
-
 #define F_CPU 1000000UL 
 
 #define UBRR_VALUE 25
@@ -50,6 +38,31 @@
 
 #define DIR_LEFT  0
 #define DIR_RIGHT 1
+
+#define FULLSTEP	0
+#define HALFSTEP	1
+#define QUARSTEP	2
+#define EIGHSTEP	3
+#define SIXTSTEP	4
+
+// determines if steppers are held at position while
+// not moving
+#define HOLD
+
+// SPEED is between 0 and 10
+#define SPEED 8
+
+ // ------------------------------
+ // USART 
+ // 
+ // UBRR values for U2X=0:
+ // ----------------------
+ // clock -->	1MHz  2MHz  4MHz 
+ // baud v|  UBRR  UBRR  UBRR
+ // 2400  |  25  	  51    103
+ // 4800  |  12  	  25     51
+ // 9600  |  6  	  12
+
 
 void USART_Init();
 void USART_WriteChar(char data);
@@ -86,9 +99,9 @@ void I2C_DataSend(uint8_t SLA, uint8_t Data);
 // D7			PC3
 
 // Common instructions
-//  1 : clear display
-//	2 : go to first
-//	4 : go to previous symbol
+//  0x01 : clear display
+//	0x02 : go to first
+//	0x04 : go to previous symbol
 //	0xC0 : go to second line
 
 
@@ -100,9 +113,20 @@ void DisplayWriteString(char * InputString, uint8_t address);
 
 
 // stepper driver A4988
+//
+// Driver	MCU
+// -----------
+// !ENA		PB0
+// MS1		PB1
+// MS2		PB2
+// MS3		GND
+// DIR		PB3
+// STEP		PB4
 
+void SetStep(uint8_t stepSize);
 void Step(uint8_t direction);
 void Rotate(uint8_t steps, uint8_t direction);
+
 
 // misc
 
