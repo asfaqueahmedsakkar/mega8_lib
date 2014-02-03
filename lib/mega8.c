@@ -363,6 +363,19 @@ void DisplayWriteString(char * InputString, const uint8_t address)
 }
 
 //
+// stepper driver A4988
+//
+
+void Step(uint8_t direction)
+{
+    
+
+}
+
+void Rotate(uint8_t steps, uint8_t direction);
+
+
+//
 // Misc
 //
 
