@@ -40,9 +40,15 @@ Based on <http://www.atmel.com/images/atmel-2486-8-bit-avr-microcontroller-atmeg
 
 #### Stepper driver 4988 ####
 
-	... working on
+	void SetStep(uint8_t stepSize);
+	void Step(uint8_t direction);
+	void Rotate(uint8_t steps, uint8_t direction);	
 
-### Examples compilation ###
+### Examples ###
+
+Directory examples contains few code examples ready to be directly loaded into device, pin connections are commented out in mega8.h or right into the example code.
+
+#### Compilation ####
 
 You should modify makefile for your needs (now set for programming with AVR Dragon), change variable PROJECT to file name (exclude extension)
 

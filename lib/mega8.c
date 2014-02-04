@@ -407,7 +407,11 @@ void Rotate(uint8_t steps, uint8_t direction)
 {
     int i;    
     for(i=0;i<steps;i++)
+    {
         Step(direction);
+        _delay_ms(1000 - (SPEED * 100);
+    }
+        
 }
 
 

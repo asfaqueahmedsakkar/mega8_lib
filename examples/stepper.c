@@ -31,17 +31,13 @@
 int main(void)
 {	
 
-	DDRD = 1;
-	DDRC = (15 << DDC0);
-	DDRB = (7 << DDB3);
+	DDRB |= (31 << DDB0);	// PB0 to PB4 as output
+
+
 	
 	_delay_ms(1000);
 
-
-	// enables innterupts			
-	sei();
-
-
+	Rotate(45,DIR_LEFT);
 	
     while(1)
     {
